@@ -1,0 +1,20 @@
+# Ignore datasets
+data/
+Img_gene/
+mlruns/
+*.csv
+*.npy
+*.npz
+
+# Ignore trained models
+*.h5
+*.hdf5
+
+# Ignore Python cache
+__pycache__/
+*.pyc
+
+# Ignore virtual environments
+.venv/
+env/
+venv/
