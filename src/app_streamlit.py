@@ -175,6 +175,13 @@ def main():
     # Theming switch
     mode = st.sidebar.radio("🌓 Tema", ["Modo oscuro", "Modo claro"])
     apply_theme(dark_mode = (mode == "Modo oscuro"))
+    st.sidebar.markdown("---")
+    st.sidebar.markdown(
+        """
+        ### 🔗 Enlaces del proyecto
+        - 📁 [Repositorio en GitHub](https://github.com/JuanRaigoso/skin-cancer-classification/tree/main)
+        """
+)
 
     st.title("🧬 Clasificación de Cáncer de Piel (EfficientNetB4)")
     st.info("Esta herramienta es solamente para fines educativos. No es diagnóstico médico.")
