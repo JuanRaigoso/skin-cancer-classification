@@ -181,7 +181,28 @@ def main():
         ### 🔗 Enlaces del proyecto
         - 📁 [Repositorio en GitHub](https://github.com/JuanRaigoso/skin-cancer-classification/tree/main)
         """
+    )
+    
+    st.markdown(
+    """
+    <div style="text-align: center;">
+        <a href="https://github.com/JuanRaigoso/skin-cancer-classification/tree/main" target="_blank">
+            <button style="
+                background-color:#1f77b4;
+                color:white;
+                border:none;
+                padding:10px 20px;
+                border-radius:8px;
+                font-size:16px;
+                cursor:pointer;">
+                🌐 Ver proyecto en GitHub
+            </button>
+        </a>
+    </div>
+    """,
+    unsafe_allow_html=True
 )
+
 
     st.title("🧬 Clasificación de Cáncer de Piel (EfficientNetB4)")
     st.info("Esta herramienta es solamente para fines educativos. No es diagnóstico médico.")
