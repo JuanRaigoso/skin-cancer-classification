@@ -3,6 +3,7 @@ import numpy as np
 from sklearn.utils.class_weight import compute_class_weight
 import os
 from config import BATCH_SIZE, IMG_HEIGHT, IMG_WIDTH, DATA_DIR, NUM_CLASSES
+
 AUTOTUNE = tf.data.AUTOTUNE
 
 # ============================================
@@ -21,63 +22,44 @@ def get_augmentations():
 
 
 # ============================================
-#   MIXUP + CUTMIX IMPLEMENTACIÓN
+#   MIXUP (VERSIÓN ESTABLE Y SIMPLE)
 # ============================================
 
-def sample_beta_distribution(size, concentration_0=0.2, concentration_1=0.2):
-    gamma_1 = tf.random.gamma(shape=[size], alpha=concentration_0)
-    gamma_2 = tf.random.gamma(shape=[size], alpha=concentration_1)
-    return gamma_1 / (gamma_1 + gamma_2)
-
 def mixup(images, labels, alpha=0.2):
+    """
+    Aplica MixUp a un batch completo.
+    """
     batch_size = tf.shape(images)[0]
-    l = sample_beta_distribution(batch_size, alpha, alpha)
-    x_l = tf.reshape(l, (batch_size, 1, 1, 1))
 
-    index = tf.random.shuffle(tf.range(batch_size))
-    mixed_images = images * x_l + tf.gather(images, index) * (1 - x_l)
-    mixed_labels = labels * l[:, None] + tf.gather(labels, index) * (1 - l[:, None])
+    # Lambda ~ Uniform(0,1) (simple y funciona bien)
+    lam = tf.random.uniform([], 0, 1)
+
+    # Reordenar el batch
+    indices = tf.random.shuffle(tf.range(batch_size))
+
+    mixed_images = lam * images + (1.0 - lam) * tf.gather(images, indices)
+    mixed_labels = lam * labels + (1.0 - lam) * tf.gather(labels, indices)
+
     return mixed_images, mixed_labels
 
-def cutmix(images, labels, alpha=0.3):
-    batch_size = tf.shape(images)[0]
-    W = IMG_WIDTH
-    H = IMG_HEIGHT
 
-    l = sample_beta_distribution(batch_size, alpha, alpha)
+# ============================================
+#   FUNCIÓN DE AUGMENTACIÓN GLOBAL
+# ============================================
 
-    cut_rat = tf.math.sqrt(1. - l)
-    cut_w = tf.cast(W * cut_rat, tf.int32)
-    cut_h = tf.cast(H * cut_rat, tf.int32)
+def apply_augmentations(x, y, aug):
+    """
+    Aplica augmentaciones de Keras + (a veces) MixUp.
+    """
+    # Augmentaciones geométricas / fotométricas
+    x = aug(x, training=True)
 
-    cx = tf.random.uniform((batch_size,), 0, W, tf.int32)
-    cy = tf.random.uniform((batch_size,), 0, H, tf.int32)
+    # Decide aleatoriamente si aplicar MixUp o no
+    r = tf.random.uniform(())
+    if r < 0.5:
+        x, y = mixup(x, y)
 
-    x1 = tf.clip_by_value(cx - cut_w // 2, 0, W)
-    y1 = tf.clip_by_value(cy - cut_h // 2, 0, H)
-    x2 = tf.clip_by_value(cx + cut_w // 2, 0, W)
-    y2 = tf.clip_by_value(cy + cut_h // 2, 0, H)
-
-    index = tf.random.shuffle(tf.range(batch_size))
-    shuffled_images = tf.gather(images, index)
-    shuffled_labels = tf.gather(labels, index)
-
-    new_images = []
-    for i in range(batch_size):
-        image = images[i]
-        cut_image = shuffled_images[i]
-        image = tf.tensor_scatter_nd_update(
-            image,
-            tf.reshape(tf.range(y1[i], y2[i]), (-1, 1)),
-            tf.reshape(cut_image[y1[i]:y2[i], x1[i]:x2[i], :], (-1, x2[i]-x1[i], 3)),
-        )
-        new_images.append(image)
-    new_images = tf.stack(new_images)
-
-    lam = 1 - ((x2 - x1) * (y2 - y1)) / (W * H)
-    new_labels = labels * lam + shuffled_labels * (1 - lam)
-
-    return new_images, new_labels
+    return x, y
 
 
 # ============================================
@@ -105,18 +87,12 @@ def load_datasets():
 
     aug = get_augmentations()
 
-    def augment(x, y):
-        x = aug(x)
-        # Random aplicar MixUp o CutMix
-        r = tf.random.uniform(())
-        if r < 0.33:
-            return mixup(x, y)
-        elif r < 0.66:
-            return cutmix(x, y)
-        else:
-            return x, y
+    # Aplicar augmentaciones + MixUp SOLO al train
+    train_ds = train_ds.map(
+        lambda x, y: apply_augmentations(x, y, aug),
+        num_parallel_calls=AUTOTUNE
+    )
 
-    train_ds = train_ds.map(augment, num_parallel_calls=AUTOTUNE)
     train_ds = train_ds.prefetch(AUTOTUNE)
     val_ds = val_ds.prefetch(AUTOTUNE)
 
