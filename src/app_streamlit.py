@@ -432,93 +432,98 @@ def main():
 # SECCIÓN FINAL — FICHAS CLÍNICAS DE CADA CLASE
 # =======================================================
 
+# =======================================================
+# SECCIÓN FINAL — TARJETAS CLÍNICAS MEJORADAS (ESTILO PREMIUM)
+# =======================================================
+
     st.markdown("---")
     st.header("🧾 Fichas clínicas de cada tipo de lesión")
 
     # Paleta según modo claro/oscuro
-bg_color = "#1b1f30" if (mode == "Modo oscuro") else "#ffffff"
-card_bg = "rgba(255,255,255,0.08)" if (mode == "Modo oscuro") else "#f3f3f3"
-border_color = "#2d3553" if (mode == "Modo oscuro") else "#cccccc"
-shadow_color = "rgba(0,0,0,0.45)" if (mode == "Modo oscuro") else "rgba(0,0,0,0.15)"
+    bg_color = "#1b1f30" if (mode == "Modo oscuro") else "#ffffff"
+    card_bg = "rgba(255,255,255,0.08)" if (mode == "Modo oscuro") else "#f3f3f3"
+    border_color = "#2d3553" if (mode == "Modo oscuro") else "#cccccc"
+    shadow_color = "rgba(0,0,0,0.45)" if (mode == "Modo oscuro") else "rgba(0,0,0,0.15)"
 
-LESION_INFO = {
-    "akiec": {
-        "name": "Actinic Keratosis / Bowen disease",
-        "risk": "🟡 Precancerosa",
-        "risk_color": "#f1c232",
-        "desc": "Lesión intraepitelial con riesgo de progresar a carcinoma escamocelular."
-    },
-    "bcc": {
-        "name": "Basal Cell Carcinoma",
-        "risk": "🔴 Maligno",
-        "risk_color": "#cc0000",
-        "desc": "Cáncer cutáneo de crecimiento lento, frecuente en zonas fotoexpuestas."
-    },
-    "bkl": {
-        "name": "Benign Keratosis",
-        "risk": "🟢 Benigno",
-        "risk_color": "#6aa84f",
-        "desc": "Incluye queratosis seborreicas, lentigos benignos y queratosis solares."
-    },
-    "df": {
-        "name": "Dermatofibroma",
-        "risk": "🟢 Benigno",
-        "risk_color": "#6aa84f",
-        "desc": "Tumor cutáneo benigno, firme al tacto y generalmente estable."
-    },
-    "mel": {
-        "name": "Melanoma",
-        "risk": "🔴 Altamente maligno",
-        "risk_color": "#e06666",
-        "desc": "Neoplasia agresiva derivada de melanocitos. Requiere atención urgente."
-    },
-    "nv": {
-        "name": "Melanocytic Nevus",
-        "risk": "🟢 Benigno",
-        "risk_color": "#6aa84f",
-        "desc": "Nevus melanocítico común (‘lunar’). Usualmente estable y no maligno."
-    },
-    "vasc": {
-        "name": "Vascular lesion",
-        "risk": "🟢 Benigno",
-        "risk_color": "#6aa84f",
-        "desc": "Incluye angiomas, hemangiomas y malformaciones vasculares benignas."
+    LESION_INFO = {
+        "akiec": {
+            "name": "Actinic Keratosis / Bowen disease",
+            "risk": "🟡 Precancerosa",
+            "risk_color": "#f1c232",
+            "desc": "Lesión intraepitelial con riesgo de progresar a carcinoma escamocelular."
+        },
+        "bcc": {
+            "name": "Basal Cell Carcinoma",
+            "risk": "🔴 Maligno",
+            "risk_color": "#cc0000",
+            "desc": "Cáncer cutáneo de crecimiento lento, frecuente en zonas fotoexpuestas."
+        },
+        "bkl": {
+            "name": "Benign Keratosis",
+            "risk": "🟢 Benigno",
+            "risk_color": "#6aa84f",
+            "desc": "Incluye queratosis seborreicas, lentigos benignos y queratosis solares."
+        },
+        "df": {
+            "name": "Dermatofibroma",
+            "risk": "🟢 Benigno",
+            "risk_color": "#6aa84f",
+            "desc": "Tumor cutáneo benigno, firme al tacto y generalmente estable."
+        },
+        "mel": {
+            "name": "Melanoma",
+            "risk": "🔴 Altamente maligno",
+            "risk_color": "#e06666",
+            "desc": "Neoplasia agresiva derivada de melanocitos. Requiere atención urgente."
+        },
+        "nv": {
+            "name": "Melanocytic Nevus",
+            "risk": "🟢 Benigno",
+            "risk_color": "#6aa84f",
+            "desc": "Nevus melanocítico común (‘lunar’). Usualmente estable y no maligno."
+        },
+        "vasc": {
+            "name": "Vascular lesion",
+            "risk": "🟢 Benigno",
+            "risk_color": "#6aa84f",
+            "desc": "Incluye angiomas, hemangiomas y malformaciones vasculares benignas."
+        }
     }
-}
 
-# Estilo de tarjetas premium
-for cls in CLASS_NAMES:
-    info = LESION_INFO[cls]
+    # Estilo de tarjetas premium
+    for cls in CLASS_NAMES:
+        info = LESION_INFO[cls]
 
-    st.markdown(f"""
-    <div style="
-        border-radius: 14px;
-        padding: 20px;
-        margin-top: 20px;
-        background: {card_bg};
-        border: 1px solid {border_color};
-        box-shadow: 0px 4px 15px {shadow_color};
-        transition: transform 0.2s ease-in-out;
-    ">
-        <h3 style="margin-bottom: 6px; font-size: 24px;">
-            {cls.upper()} — {info['name']}
-        </h3>
-
-        <p style="
-            font-size: 17px;
-            margin-top: -5px;
-            margin-bottom: 12px;
-            font-weight: bold;
-            color: {info['risk_color']};
+        st.markdown(f"""
+        <div style="
+            border-radius: 14px;
+            padding: 20px;
+            margin-top: 20px;
+            background: {card_bg};
+            border: 1px solid {border_color};
+            box-shadow: 0px 4px 15px {shadow_color};
+            transition: transform 0.2s ease-in-out;
         ">
-            {info['risk']}
-        </p>
+            <h3 style="margin-bottom: 6px; font-size: 24px;">
+                {cls.upper()} — {info['name']}
+            </h3>
 
-        <p style="font-size: 16px; line-height: 1.45;">
-            {info['desc']}
-        </p>
-    </div>
-    """, unsafe_allow_html=True)
+            <p style="
+                font-size: 17px;
+                margin-top: -5px;
+                margin-bottom: 12px;
+                font-weight: bold;
+                color: {info['risk_color']};
+            ">
+                {info['risk']}
+            </p>
+
+            <p style="font-size: 16px; line-height: 1.45;">
+                {info['desc']}
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
+
 
 
 if __name__ == "__main__":
