@@ -213,6 +213,14 @@ def main():
         """
         ### 🔗 Enlaces del proyecto
         - 📁 [Repositorio en GitHub](https://github.com/JuanRaigoso/skin-cancer-classification/tree/main)
+        
+        ---
+        
+        ### 👤 Diseñador
+        **Juan David Raigoso Espinosa**
+        
+        📚 Economista  
+        📊 Mag. Ciencia de Datos
         """
     )
 
