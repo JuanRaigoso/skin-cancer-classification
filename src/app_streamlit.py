@@ -463,24 +463,8 @@ def main():
     # TARJETAS — HTML CORRECTO SIN SANGRÍA
     for cls in CLASS_NAMES:
         info = LESION_INFO[cls]
-
         st.markdown(
-            f"""
-<div class="card-clinical">
-    <h3 style="margin-bottom: 6px; font-size: 24px;">
-        {cls.upper()} — {info['name']}
-    </h3>
-
-    <p style="font-size:17px; margin-top:-5px; margin-bottom:12px;
-              font-weight:bold; color:{info['risk_color']};">
-        {info['risk']}
-    </p>
-
-    <p style="font-size:16px; line-height:1.45;">
-        {info['desc']}
-    </p>
-</div>
-""",
+            f'<div class="card-clinical"><h3 style="margin-bottom: 6px; font-size: 24px;">{cls.upper()} — {info["name"]}</h3><p style="font-size:17px; margin-top:-5px; margin-bottom:12px; font-weight:bold; color:{info["risk_color"]};">{info["risk"]}</p><p style="font-size:16px; line-height:1.45;">{info["desc"]}</p></div>',
             unsafe_allow_html=True,
         )
 
