@@ -503,7 +503,7 @@ def main():
             box-shadow: 0px 4px 15px {shadow_color};
             transition: transform 0.2s ease-in-out;
         ">
-             <h3 style="margin-bottom: 6px; font-size: 24px;">
+            <h3 style="margin-bottom: 6px; font-size: 24px;">
                 {cls.upper()} — {info['name']}
             </h3>
 
