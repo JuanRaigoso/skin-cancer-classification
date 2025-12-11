@@ -418,27 +418,33 @@ def main():
     border_color = "#2d3553" if (mode == "Modo oscuro") else "#cccccc"
     shadow_color = "rgba(0,0,0,0.45)" if (mode == "Modo oscuro") else "rgba(0,0,0,0.15)"
 
-    # CSS premium
-    st.markdown(f"""
-    <style>
-        .card-clinical {{
-            border-radius: 14px;
-            padding: 20px;
-            margin-top: 20px;
-            background: {card_bg};
-            border: 1px solid {border_color};
-            box-shadow: 0px 4px 15px {shadow_color};
-            transition: all 0.25s ease-out;
-        }}
+    # ===========================
+    # CSS premium (CORREGIDO)
+    # ===========================
+    st.markdown(
+        f"""<style>
+.card-clinical {{
+    border-radius: 14px;
+    padding: 20px;
+    margin-top: 20px;
+    background: {card_bg};
+    border: 1px solid {border_color};
+    box-shadow: 0px 4px 15px {shadow_color};
+    transition: all 0.25s ease-out;
+}}
 
-        .card-clinical:hover {{
-            transform: translateY(-6px);
-            box-shadow: 0px 8px 28px {shadow_color};
-            border-color: #6a8dff;
-        }}
-    </style>
-    """, unsafe_allow_html=True)
+.card-clinical:hover {{
+    transform: translateY(-6px);
+    box-shadow: 0px 8px 28px {shadow_color};
+    border-color: #6a8dff;
+}}
+</style>""",
+        unsafe_allow_html=True
+    )
 
+    # ===========================
+    # Información de cada lesión
+    # ===========================
     LESION_INFO = {
         "akiec": {
             "name": "Actinic Keratosis / Bowen disease",
@@ -484,28 +490,29 @@ def main():
         }
     }
 
-    # Renderizar tarjetas
+    # ===========================
+    # Renderizar tarjetas (CORREGIDO)
+    # ===========================
     for cls in CLASS_NAMES:
         info = LESION_INFO[cls]
 
-        html = f"""
-        <div class="card-clinical">
-            <h3 style="margin-bottom: 6px; font-size: 24px;">
-                {cls.upper()} — {info['name']}
-            </h3>
+        html = f"""<div class="card-clinical">
+    <h3 style="margin-bottom: 6px; font-size: 24px;">
+        {cls.upper()} — {info['name']}
+    </h3>
 
-            <p style="font-size:17px; margin-top:-5px; margin-bottom:12px;
-                      font-weight:bold; color:{info['risk_color']};">
-                {info['risk']}
-            </p>
+    <p style="font-size:17px; margin-top:-5px; margin-bottom:12px;
+              font-weight:bold; color:{info['risk_color']};">
+        {info['risk']}
+    </p>
 
-            <p style="font-size:16px; line-height:1.45;">
-                {info['desc']}
-            </p>
-        </div>
-        """
+    <p style="font-size:16px; line-height:1.45;">
+        {info['desc']}
+    </p>
+</div>"""
 
         st.markdown(html, unsafe_allow_html=True)
+
 
 
 if __name__ == "__main__":
