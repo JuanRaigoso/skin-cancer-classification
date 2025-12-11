@@ -7,8 +7,7 @@ mlruns/
 *.npz
 
 # Ignore trained models
-*.h5
-*.hdf5
+
 
 # Ignore Python cache
 __pycache__/
@@ -20,4 +19,4 @@ env/
 venv/
 
 # modelo pesado  original
-models/model_final_B4_v1_advanced.h5
+

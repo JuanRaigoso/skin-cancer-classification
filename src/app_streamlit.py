@@ -428,6 +428,70 @@ def main():
     - Las imágenes etiquetadas como **"Ejemplos externos"** se han añadido con fines ilustrativos y pueden diferir en estilo o calidad con respecto al dataset original, por lo que las predicciones pueden ser menos precisas.
     """)
 
+# =======================================================
+# SECCIÓN FINAL — FICHAS CLÍNICAS DE CADA CLASE
+# =======================================================
+
+st.markdown("---")
+st.header("🧾 Fichas clínicas de cada tipo de lesión")
+
+LESION_INFO = {
+    "akiec": {
+        "name": "Actinic Keratosis / Bowen disease",
+        "risk": "🟡 Precancerosa",
+        "desc": "Lesión intraepitelial con riesgo de progresión a carcinoma escamocelular."
+    },
+    "bcc": {
+        "name": "Basal Cell Carcinoma",
+        "risk": "🔴 Maligno",
+        "desc": "Cáncer cutáneo de crecimiento lento, frecuente en zonas fotoexpuestas."
+    },
+    "bkl": {
+        "name": "Benign Keratosis",
+        "risk": "🟢 Benigno",
+        "desc": "Incluye queratosis seborreicas, lentigos benignos y queratosis solares."
+    },
+    "df": {
+        "name": "Dermatofibroma",
+        "risk": "🟢 Benigno",
+        "desc": "Tumor cutáneo benigno, firme al tacto, usual en extremidades."
+    },
+    "mel": {
+        "name": "Melanoma",
+        "risk": "🔴 Altamente maligno",
+        "desc": "Neoplasia agresiva derivada de melanocitos; requiere valoración urgente."
+    },
+    "nv": {
+        "name": "Melanocytic Nevus",
+        "risk": "🟢 Benigno",
+        "desc": "Nevus melanocítico común (‘lunar’). Generalmente estable y benigno."
+    },
+    "vasc": {
+        "name": "Vascular lesion",
+        "risk": "🟢 Benigno",
+        "desc": "Angiomas, hemangiomas o malformaciones vasculares."
+    }
+}
+
+# Mostrar tarjetas clínicas
+for cls in CLASS_NAMES:
+    info = LESION_INFO[cls]
+
+    st.markdown(f"""
+    <div style="
+        border: 1px solid #444;
+        padding: 15px;
+        border-radius: 10px;
+        margin-bottom: 15px;
+        background-color: rgba(255,255,255,0.05);
+    ">
+        <h3>{cls.upper()} — {info['name']}</h3>
+        <p><strong>Tipo:</strong> {info['risk']}</p>
+        <p><strong>Descripción:</strong> {info['desc']}</p>
+    </div>
+    """, unsafe_allow_html=True)
+
+
 
 if __name__ == "__main__":
     main()
