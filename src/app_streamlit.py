@@ -44,7 +44,6 @@ REPORT_PATH = BASE_DIR / "classification_report_B4_v1_advanced.json"
 # ============================================================
 # CONFIGURACIÓN DE IMÁGENES DE EJEMPLO
 # ============================================================
-
 EXAMPLE_IMAGES_HAM = [
     {"id": "ham_akiec_1", "label": "akiec", "title": "AKIEC – Ejemplo 1 (HAM10000)", "path": "assets/examples/ham/akiec_1.jpg"},
     {"id": "ham_akiec_2", "label": "akiec", "title": "AKIEC – Ejemplo 2 (HAM10000)", "path": "assets/examples/ham/akiec_2.jpg"},
@@ -63,10 +62,10 @@ EXAMPLE_IMAGES_HAM = [
 ]
 
 EXAMPLE_IMAGES_EXTERNAL = [
-    {"id": "ext_df_1", "label": "df", "title": "DF – Caso clínico externo", "path": "assets/examples/external/df_web_1.jpg"},
-    {"id": "ext_nv_1",  "label": "nv",  "title": "NV – Caso clínico externo",  "path": "assets/examples/external/nv_web_1.jpg"},
-    {"id": "ext_vasc_1",  "label": "VASC",  "title": "VASC – Caso clínico externo",  "path": "assets/examples/external/vasc_web_1.jpg"},
-    {"id": "ext_vasc_2",  "label": "VASC",  "title": "VASC – Caso clínico externo",  "path": "assets/examples/external/vasc_web_2.jpg"},
+    {"id": "ext_df_1", "label": "df",   "title": "DF – Caso clínico externo",   "path": "assets/examples/external/df_web_1.jpg"},
+    {"id": "ext_nv_1", "label": "nv",   "title": "NV – Caso clínico externo",   "path": "assets/examples/external/nv_web_1.jpg"},
+    {"id": "ext_vasc_1", "label": "vasc", "title": "VASC – Caso clínico externo", "path": "assets/examples/external/vasc_web_1.jpg"},
+    {"id": "ext_vasc_2", "label": "vasc", "title": "VASC – Caso clínico externo", "path": "assets/examples/external/vasc_web_2.jpg"},
 ]
 
 
@@ -92,7 +91,7 @@ def preprocess_image(img: Image.Image):
     return np.expand_dims(arr, axis=0)
 
 
-def load_example_image(relative_path: str) -> Image.Image | None:
+def load_example_image(relative_path: str):
     abs_path = BASE_DIR / relative_path
     if not abs_path.exists():
         return None
@@ -100,11 +99,10 @@ def load_example_image(relative_path: str) -> Image.Image | None:
 
 
 # ============================================================
-# HEATMAP — Grad-CAM ROBUSTO + SmoothGrad
+# HEATMAP — SmoothGrad + Grad-CAM
 # ============================================================
 def compute_smooth_grad(img_array, model, class_idx, samples=15, noise_level=0.2):
     aggregated_grads = 0
-
     for i in range(samples):
         noise = tf.random.normal(
             shape=img_array.shape,
@@ -125,11 +123,10 @@ def compute_smooth_grad(img_array, model, class_idx, samples=15, noise_level=0.2
     smooth_grad = aggregated_grads / samples
     heatmap = tf.maximum(smooth_grad, 0)
     heatmap /= (tf.reduce_max(heatmap) + 1e-8)
-
     return heatmap.numpy()
 
 
-def apply_medical_colormap(original_img: Image.Image, heatmap: np.ndarray, alpha=0.45) -> Image.Image:
+def apply_medical_colormap(original_img, heatmap, alpha=0.45):
     heatmap_resized = cv2.resize(heatmap, (original_img.width, original_img.height))
     heatmap_uint8 = np.uint8(255 * heatmap_resized)
 
@@ -153,7 +150,7 @@ def make_gradcam(img_array, model):
 # ============================================================
 # ESTILO Y MODO OSCURO/CLARO
 # ============================================================
-def apply_theme(dark_mode: bool = True):
+def apply_theme(dark_mode=True):
     if dark_mode:
         bg = "#0c1020"
         text = "#f5f7ff"
@@ -161,9 +158,11 @@ def apply_theme(dark_mode: bool = True):
         bg = "#f5f5f5"
         text = "#111"
 
-    st.markdown(f"""
+    st.markdown(
+        f"""
     <style>
     body, .stApp {{ background-color: {bg}; color: {text}; }}
+
     h1, h2, h3, h4 {{ color: {text} !important; }}
 
     .confidence-bar {{
@@ -183,10 +182,12 @@ def apply_theme(dark_mode: bool = True):
         border-radius: 10px;
     }}
     </style>
-    """, unsafe_allow_html=True)
+    """,
+        unsafe_allow_html=True,
+    )
 
 
-def get_color(prob: float) -> str:
+def get_color(prob):
     if prob >= 0.60:
         return "🟢"
     if prob >= 0.30:
@@ -198,16 +199,16 @@ def get_color(prob: float) -> str:
 # APLICACIÓN PRINCIPAL
 # ============================================================
 def main():
+
     st.set_page_config(
         page_title="Clasificación de cáncer de piel — EfficientNetB4",
         page_icon="🧬",
-        layout="wide"
+        layout="wide",
     )
 
     mode = st.sidebar.radio("🌓 Tema", ["Modo oscuro", "Modo claro"])
     apply_theme(dark_mode=(mode == "Modo oscuro"))
 
-    st.sidebar.markdown("---")
     st.sidebar.markdown(
         """
         ### 🔗 Enlaces del proyecto
@@ -232,25 +233,24 @@ def main():
             </a>
         </div>
         """,
-        unsafe_allow_html=True
+        unsafe_allow_html=True,
     )
 
     st.title("🧬 Clasificación de Cáncer de Piel (EfficientNetB4)")
-    st.info("Esta herramienta es solamente para fines educativos. No es diagnóstico médico.")
+    st.info("Esta herramienta es solo para fines educativos. No es un diagnóstico médico.")
 
     model = load_model()
 
     col_left, col_center, col_right = st.columns([1.6, 1.1, 1.0])
 
-    # --------------------------------------------------------
-    # Columna izquierda: uploader + ejemplos
-    # --------------------------------------------------------
+    # ===========================
+    # PANEL IZQUIERDO
+    # ===========================
     with col_left:
+
         st.subheader("📁 Sube una imagen dermatoscópica")
         uploaded = st.file_uploader(
-            "Selecciona una imagen (JPG/PNG)",
-            type=["jpg", "jpeg", "png"],
-            key="uploader_main"
+            "Selecciona una imagen (JPG/PNG)", type=["jpg", "jpeg", "png"]
         )
 
         st.markdown("### 🧪 O prueba con imágenes de ejemplo")
@@ -258,52 +258,51 @@ def main():
         if "selected_example_path" not in st.session_state:
             st.session_state["selected_example_path"] = None
 
-        # HAM10000
+        # HAM
         with st.expander("📦 Ejemplos del dataset HAM10000"):
             cols = st.columns(2)
             for idx, ex in enumerate(EXAMPLE_IMAGES_HAM):
                 c = cols[idx % 2]
                 with c:
                     img = load_example_image(ex["path"])
-                    if img is not None:
+                    if img:
                         st.image(img, caption=ex["title"], width=180)
                         if st.button("Usar esta imagen", key=f"use_{ex['id']}"):
                             st.session_state["selected_example_path"] = ex["path"]
                     else:
-                        st.warning(f"No se encontró: {ex['path']}")
+                        st.warning(f"No encontrado: {ex['path']}")
 
         # Externos
-        with st.expander("🌍 Ejemplos externos (otras fuentes)"):
-            cols_ext = st.columns(2)
+        with st.expander("🌍 Ejemplos externos"):
+            cols2 = st.columns(2)
             for idx, ex in enumerate(EXAMPLE_IMAGES_EXTERNAL):
-                c = cols_ext[idx % 2]
+                c = cols2[idx % 2]
                 with c:
                     img = load_example_image(ex["path"])
-                    if img is not None:
+                    if img:
                         st.image(img, caption=ex["title"], width=180)
-                        if st.button("Usar esta imagen", key=f"use_{ex['id']}"]:
+                        if st.button("Usar esta imagen", key=f"use_{ex['id']}"):
                             st.session_state["selected_example_path"] = ex["path"]
                     else:
-                        st.warning(f"No se encontró: {ex['path']}")
+                        st.warning(f"No encontrado: {ex['path']}")
 
-    # --------------------------------------------------------
-    # Selección de imagen
-    # --------------------------------------------------------
+    # ===========================
+    # SELECCIÓN DE IMAGEN
+    # ===========================
     img_pil = None
 
-    if uploaded is not None:
+    if uploaded:
         img_pil = read_image_file(uploaded)
         st.session_state["selected_example_path"] = None
-
     else:
-        selected = st.session_state.get("selected_example_path", None)
+        selected = st.session_state.get("selected_example_path")
         if selected:
             img_pil = load_example_image(selected)
 
-    # --------------------------------------------------------
+    # ===========================
     # PREDICCIÓN
-    # --------------------------------------------------------
-    if img_pil is not None:
+    # ===========================
+    if img_pil:
         img_array = preprocess_image(img_pil)
         heatmap, probs = make_gradcam(img_array, model)
 
@@ -314,21 +313,19 @@ def main():
         grad_img = apply_medical_colormap(img_pil, heatmap)
         sorted_idx = np.argsort(probs)[::-1]
 
-        # Imagen original + heatmap
         with col_center:
             st.subheader("🩻 Imagen original")
-            st.image(img_pil, width="stretch")
+            st.image(img_pil, use_container_width=True)
 
             st.subheader("🔥 Grad-CAM (SmoothGrad + Medical Jet)")
-            st.image(grad_img, width="stretch")
+            st.image(grad_img, use_container_width=True)
 
-        # Resultados
         with col_right:
             st.subheader("📌 Predicción principal")
             st.markdown(f"### {pred_class.upper()} — {pred_prob*100:.1f}%")
             st.write(CLASS_DESCRIPTIONS[pred_class])
 
-            # Nivel de confianza
+            # Confianza
             if pred_prob >= 0.60:
                 level = "🟢 Alta"
                 color = "#00cc44"
@@ -344,13 +341,13 @@ def main():
             width = int(pred_prob * 100)
             st.markdown(
                 f"""
-                <div class="confidence-bar">
-                    <div class="confidence-inner" style="width:{width}%; background:{color};">
-                        {width}%
-                    </div>
-                </div>
-                """,
-                unsafe_allow_html=True
+<div class="confidence-bar">
+    <div class="confidence-inner" style="width:{width}%; background:{color};">
+        {width}% 
+    </div>
+</div>
+""",
+                unsafe_allow_html=True,
             )
 
             st.markdown("---")
@@ -364,11 +361,11 @@ def main():
     else:
         with col_center:
             st.subheader("Esperando imagen…")
-            st.write("Sube una imagen o selecciona un ejemplo.")
+            st.write("Sube una imagen o elige un ejemplo.")
 
-    # =======================================================
-    # Métricas del modelo
-    # =======================================================
+    # ============================================================
+    # MÉTRICAS DEL MODELO
+    # ============================================================
     st.markdown("---")
     st.header("📈 Métricas del modelo (Validación HAM10000)")
 
@@ -389,62 +386,35 @@ def main():
     else:
         st.warning("No se encontró el archivo classification_report_B4_v1_advanced.json.")
 
-    # =======================================================
-    # Interpretación
-    # =======================================================
-    st.markdown("---")
-    st.header("ℹ️ ¿Cómo interpretar los resultados?")
-
-    st.markdown("""
-    - **Confianza alta (🟢)**: el modelo está razonablemente seguro.
-    - **Confianza media (🟡)**: resultado incierto; examinar otras clases y Grad-CAM.
-    - **Confianza baja (🔴)**: el modelo no está seguro; no debe usarse para decisiones.
-    - El mapa de calor muestra **las regiones que más influyen en la predicción**.
-    """)
-
-    st.markdown("""
-    **Sobre las imágenes de ejemplo:**  
-    - Las imágenes **HAM10000** pertenecen al dataset original de entrenamiento.  
-    - Las imágenes **externas** pueden diferir en calidad y estilo, por lo que sus predicciones pueden ser menos precisas.
-    """)
-
-    # =======================================================
-    # TARJETAS CLÍNICAS PREMIUM — CORREGIDAS
-    # =======================================================
+    # ============================================================
+    # TARJETAS CLÍNICAS PREMIUM (CORREGIDAS)
+    # ============================================================
     st.markdown("---")
     st.header("🧾 Fichas clínicas de cada tipo de lesión")
 
-    card_bg = "rgba(255,255,255,0.08)" if (mode == "Modo oscuro") else "#f3f3f3"
-    border_color = "#2d3553" if (mode == "Modo oscuro") else "#cccccc"
-    shadow_color = "rgba(0,0,0,0.45)" if (mode == "Modo oscuro") else "rgba(0,0,0,0.15)"
-
-    # ===========================
-    # CSS premium (CORREGIDO)
-    # ===========================
+    # CSS premium — sin sangría
     st.markdown(
-        f"""<style>
-.card-clinical {{
+        """
+<style>
+.card-clinical {
     border-radius: 14px;
     padding: 20px;
     margin-top: 20px;
-    background: {card_bg};
-    border: 1px solid {border_color};
-    box-shadow: 0px 4px 15px {shadow_color};
+    background: rgba(255,255,255,0.08);
+    border: 1px solid #2d3553;
+    box-shadow: 0px 4px 15px rgba(0,0,0,0.45);
     transition: all 0.25s ease-out;
-}}
-
-.card-clinical:hover {{
+}
+.card-clinical:hover {
     transform: translateY(-6px);
-    box-shadow: 0px 8px 28px {shadow_color};
+    box-shadow: 0px 8px 28px rgba(0,0,0,0.45);
     border-color: #6a8dff;
-}}
-</style>""",
-        unsafe_allow_html=True
+}
+</style>
+""",
+        unsafe_allow_html=True,
     )
 
-    # ===========================
-    # Información de cada lesión
-    # ===========================
     LESION_INFO = {
         "akiec": {
             "name": "Actinic Keratosis / Bowen disease",
@@ -462,7 +432,7 @@ def main():
             "name": "Benign Keratosis",
             "risk": "🟢 Benigno",
             "risk_color": "#6aa84f",
-            "desc": "Incluye queratosis seborreicas, lentigos y queratosis solares."
+            "desc": "Incluye queratosis seborreicas, lentigos benignos y queratosis solares."
         },
         "df": {
             "name": "Dermatofibroma",
@@ -490,13 +460,13 @@ def main():
         }
     }
 
-    # ===========================
-    # Renderizar tarjetas (CORREGIDO)
-    # ===========================
+    # TARJETAS — HTML CORRECTO SIN SANGRÍA
     for cls in CLASS_NAMES:
         info = LESION_INFO[cls]
 
-        html = f"""<div class="card-clinical">
+        st.markdown(
+            f"""
+<div class="card-clinical">
     <h3 style="margin-bottom: 6px; font-size: 24px;">
         {cls.upper()} — {info['name']}
     </h3>
@@ -509,10 +479,10 @@ def main():
     <p style="font-size:16px; line-height:1.45;">
         {info['desc']}
     </p>
-</div>"""
-
-        st.markdown(html, unsafe_allow_html=True)
-
+</div>
+""",
+            unsafe_allow_html=True,
+        )
 
 
 if __name__ == "__main__":
