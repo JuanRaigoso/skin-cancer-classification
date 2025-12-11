@@ -507,18 +507,8 @@ def main():
                 {cls.upper()} — {info['name']}
             </h3>
 
-            <p style="
-                font-size: 17px;
-                margin-top: -5px;
-                margin-bottom: 12px;
-                font-weight: bold;
-                color: {info['risk_color']};
-            ">
-                {info['risk']}
-            </p>
-
-            <p style="font-size: 16px; line-height: 1.45;">
-                {info['desc']}
+            <p style="font-size:17px; margin-top:-5px; margin-bottom:12px; font-weight:bold; color:{info['risk_color']};">
+                 {info['risk']}
             </p>
         </div>
         """, unsafe_allow_html=True)
