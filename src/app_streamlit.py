@@ -40,14 +40,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 MODEL_PATH = BASE_DIR / "models" / "model_final_B4_v1_advanced.h5"
 REPORT_PATH = BASE_DIR / "classification_report_B4_v1_advanced.json"
 
+
 # ============================================================
 # CONFIGURACIÓN DE IMÁGENES DE EJEMPLO
 # ============================================================
 
-# Nota: ajusta los paths según los nombres reales de tus imágenes.
-# Estructura recomendada:
-#   assets/examples/ham/...      -> imágenes del dataset HAM10000
-#   assets/examples/external/... -> imágenes externas (internet / otros datasets)
 EXAMPLE_IMAGES_HAM = [
     {"id": "ham_akiec_1", "label": "akiec", "title": "AKIEC – Ejemplo 1 (HAM10000)", "path": "assets/examples/ham/akiec_1.jpg"},
     {"id": "ham_akiec_2", "label": "akiec", "title": "AKIEC – Ejemplo 2 (HAM10000)", "path": "assets/examples/ham/akiec_2.jpg"},
@@ -66,12 +63,10 @@ EXAMPLE_IMAGES_HAM = [
 ]
 
 EXAMPLE_IMAGES_EXTERNAL = [
-    # Ajusta estos paths y títulos a las imágenes externas que tú elijas.
     {"id": "ext_df_1", "label": "df", "title": "DF – Caso clínico externo", "path": "assets/examples/external/df_web_1.jpg"},
     {"id": "ext_nv_1",  "label": "nv",  "title": "NV – Caso clínico externo",  "path": "assets/examples/external/nv_web_1.jpg"},
     {"id": "ext_vasc_1",  "label": "VASC",  "title": "VASC – Caso clínico externo",  "path": "assets/examples/external/vasc_web_1.jpg"},
     {"id": "ext_vasc_2",  "label": "VASC",  "title": "VASC – Caso clínico externo",  "path": "assets/examples/external/vasc_web_2.jpg"},
-    # Puedes añadir más ejemplos aquí
 ]
 
 
@@ -98,10 +93,6 @@ def preprocess_image(img: Image.Image):
 
 
 def load_example_image(relative_path: str) -> Image.Image | None:
-    """
-    Carga una imagen de ejemplo a partir de una ruta relativa BASE_DIR / relative_path.
-    Si no existe, devuelve None y la app mostrará un aviso.
-    """
     abs_path = BASE_DIR / relative_path
     if not abs_path.exists():
         return None
@@ -128,7 +119,7 @@ def compute_smooth_grad(img_array, model, class_idx, samples=15, noise_level=0.2
             loss = preds[:, class_idx]
 
         grads = tape.gradient(loss, noised_img)
-        grads = tf.reduce_mean(grads, axis=-1)[0]  # reduce channels
+        grads = tf.reduce_mean(grads, axis=-1)[0]
         aggregated_grads += grads
 
     smooth_grad = aggregated_grads / samples
@@ -142,7 +133,6 @@ def apply_medical_colormap(original_img: Image.Image, heatmap: np.ndarray, alpha
     heatmap_resized = cv2.resize(heatmap, (original_img.width, original_img.height))
     heatmap_uint8 = np.uint8(255 * heatmap_resized)
 
-    # medical jet: JET + small contrast boost
     heatmap_color = cv2.applyColorMap(heatmap_uint8, cv2.COLORMAP_JET)
     heatmap_color = cv2.convertScaleAbs(heatmap_color, alpha=1.1, beta=10)
 
@@ -214,7 +204,6 @@ def main():
         layout="wide"
     )
 
-    # Theming switch
     mode = st.sidebar.radio("🌓 Tema", ["Modo oscuro", "Modo claro"])
     apply_theme(dark_mode=(mode == "Modo oscuro"))
 
@@ -266,11 +255,10 @@ def main():
 
         st.markdown("### 🧪 O prueba con imágenes de ejemplo")
 
-        # Inicializar session_state para ejemplo seleccionado
         if "selected_example_path" not in st.session_state:
             st.session_state["selected_example_path"] = None
 
-        # Ejemplos HAM10000
+        # HAM10000
         with st.expander("📦 Ejemplos del dataset HAM10000"):
             cols = st.columns(2)
             for idx, ex in enumerate(EXAMPLE_IMAGES_HAM):
@@ -284,7 +272,7 @@ def main():
                     else:
                         st.warning(f"No se encontró: {ex['path']}")
 
-        # Ejemplos externos
+        # Externos
         with st.expander("🌍 Ejemplos externos (otras fuentes)"):
             cols_ext = st.columns(2)
             for idx, ex in enumerate(EXAMPLE_IMAGES_EXTERNAL):
@@ -293,28 +281,27 @@ def main():
                     img = load_example_image(ex["path"])
                     if img is not None:
                         st.image(img, caption=ex["title"], width=180)
-                        if st.button("Usar esta imagen", key=f"use_{ex['id']}"):
+                        if st.button("Usar esta imagen", key=f"use_{ex['id']}"]:
                             st.session_state["selected_example_path"] = ex["path"]
                     else:
                         st.warning(f"No se encontró: {ex['path']}")
 
     # --------------------------------------------------------
-    # Lógica para decidir qué imagen usar (upload vs ejemplo)
+    # Selección de imagen
     # --------------------------------------------------------
     img_pil = None
 
     if uploaded is not None:
-        # Si el usuario sube una imagen, esa tiene prioridad
         img_pil = read_image_file(uploaded)
-        st.session_state["selected_example_path"] = None  # Reset ejemplo
+        st.session_state["selected_example_path"] = None
+
     else:
-        # Si no hay upload, pero sí hay un ejemplo seleccionado
-        selected_path = st.session_state.get("selected_example_path", None)
-        if selected_path:
-            img_pil = load_example_image(selected_path)
+        selected = st.session_state.get("selected_example_path", None)
+        if selected:
+            img_pil = load_example_image(selected)
 
     # --------------------------------------------------------
-    # Si tenemos una imagen (de upload o de ejemplo), predecimos
+    # PREDICCIÓN
     # --------------------------------------------------------
     if img_pil is not None:
         img_array = preprocess_image(img_pil)
@@ -327,9 +314,7 @@ def main():
         grad_img = apply_medical_colormap(img_pil, heatmap)
         sorted_idx = np.argsort(probs)[::-1]
 
-        # --------------------------------------------------
-        # Imagen original y Heatmap
-        # --------------------------------------------------
+        # Imagen original + heatmap
         with col_center:
             st.subheader("🩻 Imagen original")
             st.image(img_pil, width="stretch")
@@ -337,15 +322,13 @@ def main():
             st.subheader("🔥 Grad-CAM (SmoothGrad + Medical Jet)")
             st.image(grad_img, width="stretch")
 
-        # --------------------------------------------------
         # Resultados
-        # --------------------------------------------------
         with col_right:
             st.subheader("📌 Predicción principal")
             st.markdown(f"### {pred_class.upper()} — {pred_prob*100:.1f}%")
             st.write(CLASS_DESCRIPTIONS[pred_class])
 
-            # Nivel de confianza + Confidence Meter
+            # Nivel de confianza
             if pred_prob >= 0.60:
                 level = "🟢 Alta"
                 color = "#00cc44"
@@ -370,21 +353,21 @@ def main():
                 unsafe_allow_html=True
             )
 
-            # Probabilidades por clase
             st.markdown("---")
-            st.subheader("📊 Probabilidades")
+            st.subheader("📊 Probabilidades por clase")
+
             for i in sorted_idx:
                 cls = CLASS_NAMES[i]
                 pr = float(probs[i])
                 st.markdown(f"- {get_color(pr)} **{cls.upper()}**: {pr*100:.1f}%")
+
     else:
-        # Caso sin imagen cargada ni ejemplo seleccionado
         with col_center:
             st.subheader("Esperando imagen…")
-            st.write("Sube una imagen a la izquierda o selecciona un ejemplo para comenzar.")
+            st.write("Sube una imagen o selecciona un ejemplo.")
 
     # =======================================================
-    # PANEL DE MÉTRICAS DEL MODELO
+    # Métricas del modelo
     # =======================================================
     st.markdown("---")
     st.header("📈 Métricas del modelo (Validación HAM10000)")
@@ -400,7 +383,6 @@ def main():
             "F1-score": [report[c]["f1-score"] for c in CLASS_NAMES],
         })
 
-        # Botón para ver el JSON completo
         if st.button("📄 Mostrar classification_report.json"):
             st.json(report)
 
@@ -408,7 +390,7 @@ def main():
         st.warning("No se encontró el archivo classification_report_B4_v1_advanced.json.")
 
     # =======================================================
-    # EXPLICACIÓN DE INTERPRETACIÓN
+    # Interpretación
     # =======================================================
     st.markdown("---")
     st.header("ℹ️ ¿Cómo interpretar los resultados?")
@@ -417,31 +399,26 @@ def main():
     - **Confianza alta (🟢)**: el modelo está razonablemente seguro.
     - **Confianza media (🟡)**: resultado incierto; examinar otras clases y Grad-CAM.
     - **Confianza baja (🔴)**: el modelo no está seguro; no debe usarse para decisiones.
-    - El mapa de calor muestra **las regiones de la imagen que más influyen en la predicción**.
-    - Recuerda: este sistema es **solo educativo** y no sustituye a una evaluación dermatológica real.
+    - El mapa de calor muestra **las regiones que más influyen en la predicción**.
     """)
 
     st.markdown("""
-    **Sobre las imágenes de ejemplo:**
-    
-    - Las imágenes etiquetadas como **"Ejemplos del dataset HAM10000"** provienen del dataset original de entrenamiento y representan el dominio para el que fue optimizado el modelo.
-    - Las imágenes etiquetadas como **"Ejemplos externos"** se han añadido con fines ilustrativos y pueden diferir en estilo o calidad con respecto al dataset original, por lo que las predicciones pueden ser menos precisas.
+    **Sobre las imágenes de ejemplo:**  
+    - Las imágenes **HAM10000** pertenecen al dataset original de entrenamiento.  
+    - Las imágenes **externas** pueden diferir en calidad y estilo, por lo que sus predicciones pueden ser menos precisas.
     """)
 
     # =======================================================
-    # SECCIÓN FINAL — TARJETAS CLÍNICAS PREMIUM CON EFECTO HOVER
+    # TARJETAS CLÍNICAS PREMIUM — CORREGIDAS
     # =======================================================
-
     st.markdown("---")
     st.header("🧾 Fichas clínicas de cada tipo de lesión")
 
-    # Paleta según modo claro/oscuro
-    bg_color = "#1b1f30" if (mode == "Modo oscuro") else "#ffffff"
     card_bg = "rgba(255,255,255,0.08)" if (mode == "Modo oscuro") else "#f3f3f3"
     border_color = "#2d3553" if (mode == "Modo oscuro") else "#cccccc"
     shadow_color = "rgba(0,0,0,0.45)" if (mode == "Modo oscuro") else "rgba(0,0,0,0.15)"
 
-    # Estilos globales CSS (hover incluido)
+    # CSS premium
     st.markdown(f"""
     <style>
         .card-clinical {{
@@ -462,7 +439,6 @@ def main():
     </style>
     """, unsafe_allow_html=True)
 
-    # Diccionario de información clínica
     LESION_INFO = {
         "akiec": {
             "name": "Actinic Keratosis / Bowen disease",
@@ -474,63 +450,62 @@ def main():
             "name": "Basal Cell Carcinoma",
             "risk": "🔴 Maligno",
             "risk_color": "#cc0000",
-            "desc": "Cáncer cutáneo de crecimiento lento, frecuente en zonas fotoexpuestas."
+            "desc": "Cáncer cutáneo de crecimiento lento."
         },
         "bkl": {
             "name": "Benign Keratosis",
             "risk": "🟢 Benigno",
             "risk_color": "#6aa84f",
-            "desc": "Incluye queratosis seborreicas, lentigos benignos y queratosis solares."
+            "desc": "Incluye queratosis seborreicas, lentigos y queratosis solares."
         },
         "df": {
             "name": "Dermatofibroma",
             "risk": "🟢 Benigno",
             "risk_color": "#6aa84f",
-            "desc": "Tumor cutáneo benigno, firme al tacto y generalmente estable."
+            "desc": "Tumor benigno, firme y estable."
         },
         "mel": {
             "name": "Melanoma",
             "risk": "🔴 Altamente maligno",
             "risk_color": "#e06666",
-            "desc": "Neoplasia agresiva derivada de melanocitos. Requiere atención urgente."
+            "desc": "Neoplasia agresiva que requiere atención urgente."
         },
         "nv": {
             "name": "Melanocytic Nevus",
             "risk": "🟢 Benigno",
             "risk_color": "#6aa84f",
-            "desc": "Nevus melanocítico común (‘lunar’). Usualmente estable y no maligno."
+            "desc": "Nevus común (‘lunar’). Normalmente estable."
         },
         "vasc": {
             "name": "Vascular lesion",
             "risk": "🟢 Benigno",
             "risk_color": "#6aa84f",
-            "desc": "Incluye angiomas, hemangiomas y malformaciones vasculares benignas."
+            "desc": "Incluye angiomas y hemangiomas."
         }
     }
 
-    # Renderizar tarjetas clínicas
+    # Renderizar tarjetas
     for cls in CLASS_NAMES:
         info = LESION_INFO[cls]
 
-        html_card = f"""
-    <div class="card-clinical">
-        <h3 style="margin-bottom: 6px; font-size: 24px;">
-            {cls.upper()} — {info['name']}
-        </h3>
+        html = f"""
+        <div class="card-clinical">
+            <h3 style="margin-bottom: 6px; font-size: 24px;">
+                {cls.upper()} — {info['name']}
+            </h3>
 
-        <p style="font-size:17px; margin-top:-5px; margin-bottom:12px;
-                font-weight:bold; color:{info['risk_color']};">
-            {info['risk']}
-        </p>
+            <p style="font-size:17px; margin-top:-5px; margin-bottom:12px;
+                      font-weight:bold; color:{info['risk_color']};">
+                {info['risk']}
+            </p>
 
-        <p style="font-size:16px; line-height:1.45;">
-            {info['desc']}
-        </p>
-    </div>
-    """
+            <p style="font-size:16px; line-height:1.45;">
+                {info['desc']}
+            </p>
+        </div>
+        """
 
-        st.markdown(html_card, unsafe_allow_html=True)
-
+        st.markdown(html, unsafe_allow_html=True)
 
 
 if __name__ == "__main__":
