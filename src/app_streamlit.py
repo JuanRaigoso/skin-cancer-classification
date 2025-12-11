@@ -67,9 +67,10 @@ EXAMPLE_IMAGES_HAM = [
 
 EXAMPLE_IMAGES_EXTERNAL = [
     # Ajusta estos paths y títulos a las imágenes externas que tú elijas.
-    {"id": "ext_mel_1", "label": "mel", "title": "MEL – Caso clínico externo", "path": "assets/examples/external/mel_web_1.jpg"},
-    {"id": "ext_bcc_1", "label": "bcc", "title": "BCC – Caso clínico externo", "path": "assets/examples/external/bcc_web_1.jpg"},
+    {"id": "ext_df_1", "label": "df", "title": "DF – Caso clínico externo", "path": "assets/examples/external/df_web_1.jpg"},
     {"id": "ext_nv_1",  "label": "nv",  "title": "NV – Caso clínico externo",  "path": "assets/examples/external/nv_web_1.jpg"},
+    {"id": "ext_vasc_1",  "label": "VASC",  "title": "VASC – Caso clínico externo",  "path": "assets/examples/external/vasc_web_1.jpg"},
+    {"id": "ext_vasc_2",  "label": "VASC",  "title": "VASC – Caso clínico externo",  "path": "assets/examples/external/vasc_web_2.jpg"},
     # Puedes añadir más ejemplos aquí
 ]
 
