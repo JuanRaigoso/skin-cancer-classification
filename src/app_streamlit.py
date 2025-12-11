@@ -513,23 +513,24 @@ def main():
         info = LESION_INFO[cls]
 
         html_card = f"""
-        <div class="card-clinical">
-            <h3 style="margin-bottom: 6px; font-size: 24px;">
-                {cls.upper()} — {info['name']}
-            </h3>
+    <div class="card-clinical">
+        <h3 style="margin-bottom: 6px; font-size: 24px;">
+            {cls.upper()} — {info['name']}
+        </h3>
 
-            <p style="font-size:17px; margin-top:-5px; margin-bottom:12px;
-                      font-weight:bold; color:{info['risk_color']};">
-                {info['risk']}
-            </p>
+        <p style="font-size:17px; margin-top:-5px; margin-bottom:12px;
+                font-weight:bold; color:{info['risk_color']};">
+            {info['risk']}
+        </p>
 
-            <p style="font-size:16px; line-height:1.45;">
-                {info['desc']}
-            </p>
-        </div>
-        """
+        <p style="font-size:16px; line-height:1.45;">
+            {info['desc']}
+        </p>
+    </div>
+    """
 
         st.markdown(html_card, unsafe_allow_html=True)
+
 
 
 if __name__ == "__main__":
