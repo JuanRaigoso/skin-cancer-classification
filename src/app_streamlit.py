@@ -428,11 +428,8 @@ def main():
     - Las imágenes etiquetadas como **"Ejemplos externos"** se han añadido con fines ilustrativos y pueden diferir en estilo o calidad con respecto al dataset original, por lo que las predicciones pueden ser menos precisas.
     """)
 
-# =======================================================
-# SECCIÓN FINAL — FICHAS CLÍNICAS DE CADA CLASE
-# =======================================================
     # =======================================================
-    # SECCIÓN FINAL — TARJETAS CLÍNICAS MEJORADAS (ESTILO PREMIUM)
+    # SECCIÓN FINAL — TARJETAS CLÍNICAS PREMIUM CON EFECTO HOVER
     # =======================================================
 
     st.markdown("---")
@@ -444,6 +441,28 @@ def main():
     border_color = "#2d3553" if (mode == "Modo oscuro") else "#cccccc"
     shadow_color = "rgba(0,0,0,0.45)" if (mode == "Modo oscuro") else "rgba(0,0,0,0.15)"
 
+    # Estilos globales CSS (hover incluido)
+    st.markdown(f"""
+    <style>
+        .card-clinical {{
+            border-radius: 14px;
+            padding: 20px;
+            margin-top: 20px;
+            background: {card_bg};
+            border: 1px solid {border_color};
+            box-shadow: 0px 4px 15px {shadow_color};
+            transition: all 0.25s ease-out;
+        }}
+
+        .card-clinical:hover {{
+            transform: translateY(-6px);
+            box-shadow: 0px 8px 28px {shadow_color};
+            border-color: #6a8dff;
+        }}
+    </style>
+    """, unsafe_allow_html=True)
+
+    # Diccionario de información clínica
     LESION_INFO = {
         "akiec": {
             "name": "Actinic Keratosis / Bowen disease",
@@ -489,20 +508,12 @@ def main():
         }
     }
 
-    # Estilo de tarjetas premium
+    # Renderizar tarjetas clínicas
     for cls in CLASS_NAMES:
         info = LESION_INFO[cls]
 
-        st.markdown(f"""
-        <div style="
-            border-radius: 14px;
-            padding: 20px;
-            margin-top: 20px;
-            background: {card_bg};
-            border: 1px solid {border_color};
-            box-shadow: 0px 4px 15px {shadow_color};
-            transition: transform 0.2s ease-in-out;
-        ">
+        html_card = f"""
+        <div class="card-clinical">
             <h3 style="margin-bottom: 6px; font-size: 24px;">
                 {cls.upper()} — {info['name']}
             </h3>
@@ -516,7 +527,9 @@ def main():
                 {info['desc']}
             </p>
         </div>
-        """, unsafe_allow_html=True)
+        """
+
+        st.markdown(html_card, unsafe_allow_html=True)
 
 
 if __name__ == "__main__":
