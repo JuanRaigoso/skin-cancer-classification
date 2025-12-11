@@ -476,6 +476,26 @@ def main():
             unsafe_allow_html=True,
         )
 
+    # ============================================================
+    # INFORMACIÓN SOBRE LAS IMÁGENES DE EJEMPLO
+    # ============================================================
+    st.markdown("---")
+    st.markdown(
+        """
+<div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+            border-radius: 14px; padding: 24px; margin-top: 20px; 
+            box-shadow: 0px 6px 20px rgba(102, 126, 234, 0.3);">
+    <h3 style="color: white; margin-bottom: 16px; font-size: 20px;">📸 Sobre las imágenes de ejemplo</h3>
+    <div style="color: #f0f0f0; font-size: 15px; line-height: 1.6;">
+        <p><strong>• Ejemplos del dataset HAM10000:</strong> Provienen del dataset original de entrenamiento y representan el dominio para el que fue optimizado el modelo.</p>
+        <p><strong>• Ejemplos externos:</strong> Se han añadido con fines ilustrativos y pueden diferir en estilo, luz, color, enfoque o técnica dermatoscópica. Por ello, el modelo puede mostrar una caída en precisión al analizarlas.</p>
+        <p><strong>• Comportamiento real:</strong> Esto refleja un comportamiento real en modelos clínicos: la exactitud puede disminuir cuando la imagen proviene de un dominio diferente al del entrenamiento.</p>
+    </div>
+</div>
+        """,
+        unsafe_allow_html=True,
+    )
+
 
 if __name__ == "__main__":
     main()
