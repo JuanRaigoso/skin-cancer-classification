@@ -431,10 +431,9 @@ def main():
 # =======================================================
 # SECCIÓN FINAL — FICHAS CLÍNICAS DE CADA CLASE
 # =======================================================
-
-# =======================================================
-# SECCIÓN FINAL — TARJETAS CLÍNICAS MEJORADAS (ESTILO PREMIUM)
-# =======================================================
+    # =======================================================
+    # SECCIÓN FINAL — TARJETAS CLÍNICAS MEJORADAS (ESTILO PREMIUM)
+    # =======================================================
 
     st.markdown("---")
     st.header("🧾 Fichas clínicas de cada tipo de lesión")
@@ -523,7 +522,6 @@ def main():
             </p>
         </div>
         """, unsafe_allow_html=True)
-
 
 
 if __name__ == "__main__":
