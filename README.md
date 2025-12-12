@@ -49,6 +49,77 @@ Clasificar **lesiones cutáneas en 7 categorías clínicas** a partir de imágen
 
 ---
 
+## ⚠️ Desafíos del Proyecto — Desbalance de Clases
+
+Uno de los principales retos técnicos de este proyecto fue el **fuerte desbalance de clases** presente en el dataset **HAM10000**, una característica común —y crítica— en datasets médicos reales.
+
+### 📊 Distribución  de Clases
+
+| Clase | Descripción | # Imágenes |
+|------|------------|-----------|
+| nv | Nevus (lunar benigno) | 6,705 |
+| mel | Melanoma maligno | 1,113 |
+| bkl | Queratosis benigna | 1,099 |
+| bcc | Carcinoma basocelular | 514 |
+| akiec | Lesión precancerosa | 327 |
+| vasc | Lesiones vasculares | 142 |
+| df | Dermatofibroma | 115 |
+
+📌 La clase **nv domina el dataset**, mientras que lesiones clínicamente críticas como **melanoma** y **akiec** están subrepresentadas.
+
+---
+
+### ❗ Impacto del Desbalance
+
+Sin un manejo adecuado:
+
+- El modelo tiende a predecir la clase mayoritaria (*nv*)
+- Se obtiene una *accuracy* artificialmente alta
+- Pero con:
+  - ❌ Bajo **recall** en melanoma
+  - ❌ Pérdida de utilidad clínica
+
+> Un clasificador que predice siempre *nv* puede alcanzar ~67% de accuracy, siendo inútil en un entorno médico real.
+
+Por esta razón, **la accuracy no es una métrica suficiente** en este contexto.
+
+---
+
+## 🛠️ Estrategias Aplicadas para Manejar el Desbalance
+
+Se implementó una **estrategia combinada**, abordando el problema desde múltiples frentes:
+
+### ✅ Class Weights
+Pesos inversamente proporcionales al tamaño de cada clase fueron incorporados en la función de pérdida, penalizando con mayor fuerza los errores en clases minoritarias y clínicamente relevantes.
+
+### ✅ Data Augmentation
+Aplicado únicamente en entrenamiento:
+- Rotaciones
+- Flips horizontales y verticales
+- Zoom
+- Variaciones de brillo y contraste
+
+Esto incrementa la diversidad visual y reduce el overfitting en clases con pocas muestras.
+
+### ✅ MixUp & CutMix
+Técnicas avanzadas de regularización que:
+- Mejoran la generalización
+- Evitan la memorización
+- Refuerzan el aprendizaje de regiones relevantes en imágenes médicas
+
+### ✅ Fine-Tuning Profundo (EfficientNetB4)
+Tras un warm-up inicial, se descongelaron capas profundas del backbone, permitiendo adaptar el modelo a patrones dermatológicos específicos, especialmente en lesiones minoritarias.
+
+### ✅ Métricas Adecuadas
+El desempeño se evaluó más allá de la accuracy, priorizando:
+- Recall (sensibilidad) para melanoma
+- F1-score
+- ROC-AUC por clase
+- Macro y Weighted averages
+---
+
+
+
 ## 🧹 Preprocesamiento & Data Engineering
 
 - **Redimensionamiento:** `380 × 380 px`
@@ -179,6 +250,7 @@ La aplicación incluye:
 ⚠️ Esta aplicación no reemplaza una consulta médica profesional.
 
 Su propósito es educativo y demostrativo, enfocado en Deep learning aplicado a salud.
+
 
 
 
