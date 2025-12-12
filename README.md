@@ -152,7 +152,7 @@ El proyecto integra **MLflow** para trazabilidad completa:
 ![ROC Curve](src/roc_B4_v1_advanced.png)
 
 ### Matriz de Confusión
-![Confusion Matrix](src/confusion_matrix_B4_v1_advanced.png)
+![Confusion Matrix](src/cm_B4_v1_advanced.png)
 
 ---
 
@@ -171,9 +171,16 @@ La aplicación incluye:
 - ✔ Definición médica de cada clase
 - ✔ Interfaz tipo **dashboard clínico** (tema oscuro, estilo laboratorio)
 
+- 💻 Ingresar a la app web: https://skin-cancer-classification-medical.streamlit.app/
 ---
 
-## 📂 Estructura del Proyecto
+
+
+## 🧑‍⚕️ Disclaimer
+
+⚠️ Esta aplicación no reemplaza una consulta médica profesional.
+
+Su propósito es educativo y demostrativo, enfocado en Deep learning aplicado a salud.
 
 
 
