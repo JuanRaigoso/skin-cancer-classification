@@ -149,7 +149,7 @@ El proyecto integra **MLflow** para trazabilidad completa:
 ![Finetune Curve](src/finetune_B4_v1_advanced.png)
 
 ### ROC-AUC por Clase
-![ROC Curve](src/roc_curve_B4_v1_advanced.png)
+![ROC Curve](src/roc_B4_v1_advanced.png)
 
 ### Matriz de Confusión
 ![Confusion Matrix](src/confusion_matrix_B4_v1_advanced.png)
@@ -174,6 +174,7 @@ La aplicación incluye:
 ---
 
 ## 📂 Estructura del Proyecto
+
 
 
 
