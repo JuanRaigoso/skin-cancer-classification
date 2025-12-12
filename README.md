@@ -169,8 +169,6 @@ La aplicación incluye:
   - 🟥 Baja
 - ✔ **Grad-CAM** para interpretabilidad clínica
 - ✔ Definición médica de cada clase
-- ✔ Interfaz tipo **dashboard clínico** (tema oscuro, estilo laboratorio)
-
 - 💻 Ingresar a la app web: https://skin-cancer-classification-medical.streamlit.app/
 ---
 
@@ -181,6 +179,7 @@ La aplicación incluye:
 ⚠️ Esta aplicación no reemplaza una consulta médica profesional.
 
 Su propósito es educativo y demostrativo, enfocado en Deep learning aplicado a salud.
+
 
 
 
