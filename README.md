@@ -111,4 +111,69 @@ El proyecto integra **MLflow** para trazabilidad completa:
   - Curvas ROC por clase
   - Checkpoints
 
-📁 Directorio:
+
+---
+
+## 🎯 Resultados — EfficientNetB4 v1 Advanced
+
+### 🧾 Métricas Globales
+
+| Métrica | Valor |
+|-------|-------|
+| Accuracy | **0.737** |
+| Macro F1 | **0.636** |
+| Weighted F1 | **0.762** |
+
+### 🔬 Métricas por Clase (resumen)
+
+| Clase | Precision | Recall | F1 |
+|------|----------|--------|----|
+| akiec | 0.90 | 0.36 | 0.52 |
+| bcc | 0.89 | 0.67 | 0.77 |
+| bkl | 0.52 | 0.87 | 0.65 |
+| df | 0.22 | 0.82 | 0.35 |
+| mel | 0.38 | 0.66 | 0.49 |
+| nv | 0.97 | 0.74 | 0.84 |
+| vasc | 0.70 | 1.00 | 0.82 |
+
+📌 El desempeño es **competitivo con publicaciones recientes** basadas en HAM10000.
+
+---
+
+## 📈 Curvas y Evaluaciones Visuales
+
+### Warm-Up Training
+![Warmup Curve](src/warmup_B4_v1_advanced.png)
+
+### Fine-Tuning
+![Finetune Curve](src/finetune_B4_v1_advanced.png)
+
+### ROC-AUC por Clase
+![ROC Curve](src/roc_curve_B4_v1_advanced.png)
+
+### Matriz de Confusión
+![Confusion Matrix](src/confusion_matrix_B4_v1_advanced.png)
+
+---
+
+## 🔥 Aplicación Web — Streamlit
+
+La aplicación incluye:
+
+- ✔ Subida de imagen (*drag & drop*)
+- ✔ Visualización de la imagen original
+- ✔ Predicción con probabilidades por clase
+- ✔ Codificación visual del riesgo:
+  - 🟩 Alta
+  - 🟨 Media
+  - 🟥 Baja
+- ✔ **Grad-CAM** para interpretabilidad clínica
+- ✔ Definición médica de cada clase
+- ✔ Interfaz tipo **dashboard clínico** (tema oscuro, estilo laboratorio)
+
+---
+
+## 📂 Estructura del Proyecto
+
+
+
