@@ -1,24 +1,42 @@
 import tensorflow as tf
-from config import CLASS_NAMES, DATA_DIR
+from config import CLASS_NAMES, MODEL_VERSION
 from dataloader import load_datasets
 from utils import evaluate_model_metrics
 
+# IMPORTANTE: focal_loss debe existir para cargar el modelo
+from model import focal_loss
+
 def main():
 
-    print("Cargando modelo entrenado...")
-    model = tf.keras.models.load_model("model_final_B3_v2.h5")
+    model_path = f"model_final_{MODEL_VERSION}.keras"
 
-    print("Cargando dataset de validación...")
-    _, val_ds = load_datasets()
+    print("📦 Cargando modelo entrenado...")
+    model = tf.keras.models.load_model(
+        model_path,
+        compile=False   # NO recompilamos para evaluación
+    )
 
-    print("Evaluando métricas clínicas (precision, recall, f1)...")
-    report = evaluate_model_metrics(model, val_ds, CLASS_NAMES, "classification_report_B3_v2.json")
+    print("📂 Cargando dataset de validación...")
+    _, val_ds, _ = load_datasets()
+
+    print("📊 Evaluando métricas clínicas (precision, recall, f1)...")
+    report_file = f"classification_report_{MODEL_VERSION}.json"
+    report = evaluate_model_metrics(
+        model,
+        val_ds,
+        CLASS_NAMES,
+        report_file
+    )
 
     print("\n=== RESULTADOS ===\n")
     for cls, metrics in report.items():
-        print(cls, metrics)
+        if isinstance(metrics, dict):
+            print(f"{cls:>10} → "
+                  f"Precision: {metrics.get('precision', 0):.3f} | "
+                  f"Recall: {metrics.get('recall', 0):.3f} | "
+                  f"F1: {metrics.get('f1-score', 0):.3f}")
 
-    print("\nArchivo guardado como classification_report_B3_v2.json")
+    print(f"\n✅ Archivo guardado como {report_file}")
 
 if __name__ == "__main__":
     main()
