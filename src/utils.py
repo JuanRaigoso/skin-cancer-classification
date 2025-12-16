@@ -60,18 +60,22 @@ def plot_roc_curve(model, val_ds, class_names, filename="roc.png"):
     y_prob = []
 
     for x, y in val_ds:
-        preds = model.predict(x)
+        preds = model.predict(x, verbose=0)
         y_true.append(y.numpy())
         y_prob.append(preds)
 
     y_true = np.vstack(y_true)
     y_prob = np.vstack(y_prob)
 
+    # 🔥 FIX: labels duros
+    y_true_hard = np.argmax(y_true, axis=1)
+
     plt.figure(figsize=(10, 8))
     auc_scores = {}
 
     for i in range(n_classes):
-        fpr, tpr, _ = roc_curve(y_true[:, i], y_prob[:, i])
+        y_true_bin = (y_true_hard == i).astype(int)
+        fpr, tpr, _ = roc_curve(y_true_bin, y_prob[:, i])
         auc_i = auc(fpr, tpr)
         auc_scores[class_names[i]] = float(auc_i)
         plt.plot(fpr, tpr, label=f"{class_names[i]} (AUC={auc_i:.3f})")
@@ -83,6 +87,7 @@ def plot_roc_curve(model, val_ds, class_names, filename="roc.png"):
     plt.close()
 
     return auc_scores
+
 
 # ======================================================
 #   CLASSIFICATION REPORT (Precision, Recall, F1)

@@ -15,8 +15,8 @@ IMG_CHANNELS = 3
 
 # Entrenamiento
 BATCH_SIZE = 12            # ajusta según GPU (L4/A100 ok, T4 baja a 8)
-EPOCHS_WARMUP = 10
-EPOCHS_FINETUNE = 40
+EPOCHS_WARMUP = 20
+EPOCHS_FINETUNE = 50
 
 LEARNING_RATE = 2e-4
 LR_FINE_TUNE = 2e-5

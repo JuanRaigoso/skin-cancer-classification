@@ -29,10 +29,10 @@ def make_callbacks(model_version):
             ckpt_path, monitor="val_loss", save_best_only=True, mode="min"
         ),
         tf.keras.callbacks.EarlyStopping(
-            monitor="val_loss", patience=8, restore_best_weights=True
+            monitor="val_loss", patience=10, restore_best_weights=True
         ),
         tf.keras.callbacks.ReduceLROnPlateau(
-            monitor="val_loss", factor=0.5, patience=3, min_lr=1e-7, verbose=1
+            monitor="val_loss", factor=0.5, patience=10, min_lr=1e-7, verbose=1
         ),
     ]
 
