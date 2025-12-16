@@ -94,3 +94,4 @@ if __name__ == "__main__":
     parser.add_argument("--temperature", type=float, default=None)
     args = parser.parse_args()
     predict_image(args.image, temperature=args.temperature)
+## Final
