@@ -14,7 +14,7 @@ IMG_WIDTH = 480
 IMG_CHANNELS = 3
 
 # Entrenamiento
-BATCH_SIZE = 12            # ajusta según GPU (L4/A100 ok, T4 baja a 8)
+BATCH_SIZE = 16            # ajusta según GPU (L4/A100 ok, T4 baja a 8)
 EPOCHS_WARMUP = 20
 EPOCHS_FINETUNE = 50
 
@@ -23,16 +23,16 @@ LR_FINE_TUNE = 2e-5
 WEIGHT_DECAY = 1e-5
 
 # Fine-tuning: cuántas capas finales desbloquear
-UNFROZEN_LAYERS = 200
+UNFROZEN_LAYERS = 300
 
 # Regularización
 DROPOUT_RATE = 0.3
-LABEL_SMOOTHING = 0.05
+LABEL_SMOOTHING = 0.03
 GRAD_CLIPNORM = 1.0
 
 # Aug robusta
-MIXUP_PROB = 0.35
-CUTMIX_PROB = 0.35
+MIXUP_PROB = 0.25
+CUTMIX_PROB = 0.25
 AUG_PROB = 1.0  # prob de aplicar augmentations keras
 RANDOM_ERASE_PROB = 0.25
 BLUR_PROB = 0.15
