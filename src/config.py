@@ -6,7 +6,7 @@ SEED = 42
 
 # Modelo base
 MODEL_NAME = "EfficientNetV2M"
-MODEL_VERSION = "V2M_v1_robust"
+MODEL_VERSION = "V2M_v2_unfreeze300"
 
 # Imagen (EffNetV2M suele ir bien con 480, pero puedes bajar a 384 si falta VRAM)
 IMG_HEIGHT = 480
