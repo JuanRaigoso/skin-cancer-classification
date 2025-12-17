@@ -10,6 +10,8 @@ pinned: false
 
 # 🧬 Clasificación de Cáncer de Piel — EfficientNetV2M (Medical V2)
 
+💻🎯 Aplicación: https://huggingface.co/spaces/JuanRaigoso/skin-cancer-classification-medical-v2 
+
 ## 🌍 Contexto del Proyecto
 
 El **cáncer de piel** es una de las enfermedades más comunes a nivel mundial.  
@@ -298,6 +300,7 @@ La aplicación incluye:
 ⚠️ Esta aplicación no reemplaza una consulta médica profesional.
 
 Su propósito es educativo y demostrativo, enfocado en Deep learning aplicado a salud.
+
 
 
 
