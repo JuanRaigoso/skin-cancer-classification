@@ -271,7 +271,7 @@ A continuación se comparan métricas entre el modelo anterior **EfficientNetB4 
 ![Finetune Curve](src/finetune_B4_v1_advanced.png)
 
 ### ROC-AUC por Clase
-![ROC Curve](src/roc_B4_v1_advanced.png)
+![ROC Curve](src/roc_V2M_v2_unfreeze300.png)
 
 ### Matriz de Confusión
 ![Confusion Matrix](src/cm_V2M_v2_unfreeze300.png)
@@ -298,6 +298,7 @@ La aplicación incluye:
 ⚠️ Esta aplicación no reemplaza una consulta médica profesional.
 
 Su propósito es educativo y demostrativo, enfocado en Deep learning aplicado a salud.
+
 
 
 
