@@ -220,68 +220,82 @@ A continuación se comparan métricas entre el modelo anterior **EfficientNetB4 
 ## 🔬 Métricas por clase (Precision / Recall / F1)
 
 ### EfficientNetB4 v1 Advanced (referencia)
-| Clase | Precision | Recall | F1 |
-|---|---:|---:|---:|
-| akiec | 0.90 | 0.36 | 0.52 |
-| bcc | 0.89 | 0.67 | 0.77 |
-| bkl | 0.52 | 0.87 | 0.65 |
-| df | 0.22 | 0.82 | 0.35 |
-| mel | 0.38 | 0.66 | 0.49 |
-| nv | 0.97 | 0.74 | 0.84 |
-| vasc | 0.70 | 1.00 | 0.82 |
+<div style="display: flex; gap: 24px; flex-wrap: wrap;">
 
-### EfficientNetV2M (nuevo)
-| Clase | Precision | Recall | F1 |
-|---|---:|---:|---:|
-| akiec | 0.788 | 0.531 | 0.634 |
-| bcc | 0.915 | 0.701 | 0.794 |
-| bkl | 0.561 | 0.830 | 0.670 |
-| df | 0.333 | 0.882 | 0.484 |
-| mel | 0.410 | 0.790 | 0.540 |
-| nv | 0.971 | 0.741 | 0.840 |
-| vasc | 0.594 | 0.905 | 0.717 |
-
-### 📌 Cambios (Δ) — dónde mejora el nuevo modelo
-| Clase | Δ Precision | Δ Recall | Δ F1 |
-|---|---:|---:|---:|
-| akiec | -0.112 | **+0.171** | **+0.114** |
-| bcc | +0.025 | +0.031 | +0.024 |
-| bkl | +0.041 | -0.040 | +0.020 |
-| df | **+0.113** | +0.062 | **+0.134** |
-| mel | +0.030 | **+0.130** | **+0.050** |
-| nv | +0.001 | +0.001 | +0.000 |
-| vasc | -0.106 | -0.095 | -0.103 |
-<div style="display: flex; gap: 20px;">
-
-  <div style="flex: 1;">
-    <h4>EfficientNetB4 v1 Advanced</h4>
+  <!-- MODELO ANTERIOR -->
+  <div style="flex: 1; min-width: 320px;">
+    <h3>EfficientNetB4 v1 Advanced (referencia)</h3>
     <table>
-      <tr><th>Clase</th><th>Precision</th><th>Recall</th><th>F1</th></tr>
-      <tr><td>akiec</td><td>0.90</td><td>0.36</td><td>0.52</td></tr>
-      <tr><td>bcc</td><td>0.89</td><td>0.67</td><td>0.77</td></tr>
-      <tr><td>bkl</td><td>0.52</td><td>0.87</td><td>0.65</td></tr>
-      <tr><td>df</td><td>0.22</td><td>0.82</td><td>0.35</td></tr>
-      <tr><td>mel</td><td>0.38</td><td>0.66</td><td>0.49</td></tr>
-      <tr><td>nv</td><td>0.97</td><td>0.74</td><td>0.84</td></tr>
-      <tr><td>vasc</td><td>0.70</td><td>1.00</td><td>0.82</td></tr>
+      <thead>
+        <tr>
+          <th>Clase</th>
+          <th>Precision</th>
+          <th>Recall</th>
+          <th>F1</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>akiec</td><td>0.90</td><td>0.36</td><td>0.52</td></tr>
+        <tr><td>bcc</td><td>0.89</td><td>0.67</td><td>0.77</td></tr>
+        <tr><td>bkl</td><td>0.52</td><td>0.87</td><td>0.65</td></tr>
+        <tr><td>df</td><td>0.22</td><td>0.82</td><td>0.35</td></tr>
+        <tr><td>mel</td><td>0.38</td><td>0.66</td><td>0.49</td></tr>
+        <tr><td>nv</td><td>0.97</td><td>0.74</td><td>0.84</td></tr>
+        <tr><td>vasc</td><td>0.70</td><td>1.00</td><td>0.82</td></tr>
+      </tbody>
     </table>
   </div>
 
-  <div style="flex: 1;">
-    <h4>EfficientNetV2M (Nuevo)</h4>
+  <!-- MODELO NUEVO -->
+  <div style="flex: 1; min-width: 320px;">
+    <h3>EfficientNetV2M (nuevo)</h3>
     <table>
-      <tr><th>Clase</th><th>Precision</th><th>Recall</th><th>F1</th></tr>
-      <tr><td>akiec</td><td>0.788</td><td>0.531</td><td>0.634</td></tr>
-      <tr><td>bcc</td><td>0.915</td><td>0.701</td><td>0.794</td></tr>
-      <tr><td>bkl</td><td>0.561</td><td>0.830</td><td>0.670</td></tr>
-      <tr><td>df</td><td>0.333</td><td>0.882</td><td>0.484</td></tr>
-      <tr><td>mel</td><td>0.410</td><td>0.790</td><td>0.540</td></tr>
-      <tr><td>nv</td><td>0.971</td><td>0.741</td><td>0.840</td></tr>
-      <tr><td>vasc</td><td>0.594</td><td>0.905</td><td>0.717</td></tr>
+      <thead>
+        <tr>
+          <th>Clase</th>
+          <th>Precision</th>
+          <th>Recall</th>
+          <th>F1</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>akiec</td><td>0.788</td><td>0.531</td><td>0.634</td></tr>
+        <tr><td>bcc</td><td>0.915</td><td>0.701</td><td>0.794</td></tr>
+        <tr><td>bkl</td><td>0.561</td><td>0.830</td><td>0.670</td></tr>
+        <tr><td>df</td><td>0.333</td><td>0.882</td><td>0.484</td></tr>
+        <tr><td>mel</td><td>0.410</td><td>0.790</td><td>0.540</td></tr>
+        <tr><td>nv</td><td>0.971</td><td>0.741</td><td>0.840</td></tr>
+        <tr><td>vasc</td><td>0.594</td><td>0.905</td><td>0.717</td></tr>
+      </tbody>
     </table>
   </div>
 
 </div>
+
+<br>
+
+<h3>📌 Cambios (Δ) — Dónde mejora el nuevo modelo</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Clase</th>
+      <th>Δ Precision</th>
+      <th>Δ Recall</th>
+      <th>Δ F1</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td>akiec</td><td>-0.112</td><td><strong>+0.171</strong></td><td><strong>+0.114</strong></td></tr>
+    <tr><td>bcc</td><td>+0.025</td><td>+0.031</td><td>+0.024</td></tr>
+    <tr><td>bkl</td><td>+0.041</td><td>-0.040</td><td>+0.020</td></tr>
+    <tr><td>df</td><td><strong>+0.113</strong></td><td>+0.062</td><td><strong>+0.134</strong></td></tr>
+    <tr><td>mel</td><td>+0.030</td><td><strong>+0.130</strong></td><td><strong>+0.050</strong></td></tr>
+    <tr><td>nv</td><td>+0.001</td><td>+0.001</td><td>+0.000</td></tr>
+    <tr><td>vasc</td><td>-0.106</td><td>-0.095</td><td>-0.103</td></tr>
+  </tbody>
+</table>
+
 
 **Lectura rápida:**
 - El nuevo modelo mejora fuerte el **recall** de clases clínicamente sensibles como **mel** (+0.130) y **akiec** (+0.171), aumentando su **F1**.
@@ -328,4 +342,5 @@ La aplicación incluye:
 ⚠️ Esta aplicación no reemplaza una consulta médica profesional.
 
 Su propósito es educativo y demostrativo, enfocado en Deep learning aplicado a salud.
+
 
