@@ -1,0 +1,7 @@
+{
+  "class_names": ["akiec", "bcc", "bkl", "df", "mel", "nv", "vasc"],
+  "img_height": 480,
+  "img_width": 480,
+  "model_name": "EfficientNetV2M",
+  "model_version": "V2M_v2_unfreeze300"
+}

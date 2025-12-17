@@ -1,22 +1,39 @@
-# Ignore datasets
-data/
-Img_gene/
-mlruns/
-*.csv
-*.npy
-*.npz
-
-# Ignore trained models
-
-
-# Ignore Python cache
+# =========================
+# Python / cache
+# =========================
 __pycache__/
 *.pyc
+*.pyo
+*.pyd
 
-# Ignore virtual environments
+# =========================
+# Entorno local
+# =========================
 .venv/
-env/
-venv/
+.env
 
-# modelo pesado  original
+# =========================
+# Datos y logs (NO subir)
+# =========================
+data/
+mlruns/
+img_gene/
+
+# =========================
+# Archivos temporales / sistema
+# =========================
+.DS_Store
+Thumbs.db
+
+# =========================
+# Modelos viejos / sueltos (evitar subir por error)
+# (mantén SOLO el modelo final dentro de artifacts/)
+# =========================
+models/
+src/model_final*.h5
+src/model_final*.keras
+*.ckpt
+*.ckpt.*
+checkpoints/
+tensorboard/
 
