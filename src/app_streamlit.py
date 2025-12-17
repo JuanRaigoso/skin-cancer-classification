@@ -76,7 +76,7 @@ def load_example_image(relative_path: str):
 # ============================================================
 @st.cache_resource
 def load_model_cached():
-    return tf.keras.models.load_model(MODEL_PATH, compile=False)
+    return tf.keras.models.load_model(MODEL_PATH, compile=False, safe_mode=False)
 
 
 # ============================================================
