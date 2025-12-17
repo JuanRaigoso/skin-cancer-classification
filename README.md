@@ -251,6 +251,37 @@ A continuación se comparan métricas entre el modelo anterior **EfficientNetB4 
 | mel | +0.030 | **+0.130** | **+0.050** |
 | nv | +0.001 | +0.001 | +0.000 |
 | vasc | -0.106 | -0.095 | -0.103 |
+<div style="display: flex; gap: 20px;">
+
+  <div style="flex: 1;">
+    <h4>EfficientNetB4 v1 Advanced</h4>
+    <table>
+      <tr><th>Clase</th><th>Precision</th><th>Recall</th><th>F1</th></tr>
+      <tr><td>akiec</td><td>0.90</td><td>0.36</td><td>0.52</td></tr>
+      <tr><td>bcc</td><td>0.89</td><td>0.67</td><td>0.77</td></tr>
+      <tr><td>bkl</td><td>0.52</td><td>0.87</td><td>0.65</td></tr>
+      <tr><td>df</td><td>0.22</td><td>0.82</td><td>0.35</td></tr>
+      <tr><td>mel</td><td>0.38</td><td>0.66</td><td>0.49</td></tr>
+      <tr><td>nv</td><td>0.97</td><td>0.74</td><td>0.84</td></tr>
+      <tr><td>vasc</td><td>0.70</td><td>1.00</td><td>0.82</td></tr>
+    </table>
+  </div>
+
+  <div style="flex: 1;">
+    <h4>EfficientNetV2M (Nuevo)</h4>
+    <table>
+      <tr><th>Clase</th><th>Precision</th><th>Recall</th><th>F1</th></tr>
+      <tr><td>akiec</td><td>0.788</td><td>0.531</td><td>0.634</td></tr>
+      <tr><td>bcc</td><td>0.915</td><td>0.701</td><td>0.794</td></tr>
+      <tr><td>bkl</td><td>0.561</td><td>0.830</td><td>0.670</td></tr>
+      <tr><td>df</td><td>0.333</td><td>0.882</td><td>0.484</td></tr>
+      <tr><td>mel</td><td>0.410</td><td>0.790</td><td>0.540</td></tr>
+      <tr><td>nv</td><td>0.971</td><td>0.741</td><td>0.840</td></tr>
+      <tr><td>vasc</td><td>0.594</td><td>0.905</td><td>0.717</td></tr>
+    </table>
+  </div>
+
+</div>
 
 **Lectura rápida:**
 - El nuevo modelo mejora fuerte el **recall** de clases clínicamente sensibles como **mel** (+0.130) y **akiec** (+0.171), aumentando su **F1**.
@@ -297,3 +328,4 @@ La aplicación incluye:
 ⚠️ Esta aplicación no reemplaza una consulta médica profesional.
 
 Su propósito es educativo y demostrativo, enfocado en Deep learning aplicado a salud.
+
