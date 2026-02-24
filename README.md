@@ -280,7 +280,7 @@ A continuación se comparan métricas entre el modelo anterior **EfficientNetB4 
 
 ---
 
-## 🔥 Aplicación Web — Streamlit
+## 🔥 Aplicación Web — hugginface
 
 La aplicación incluye:
 
@@ -300,6 +300,7 @@ La aplicación incluye:
 ⚠️ Esta aplicación no reemplaza una consulta médica profesional.
 
 Su propósito es educativo y demostrativo, enfocado en Deep learning aplicado a salud.
+
 
 
 
